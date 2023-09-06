@@ -7,3 +7,7 @@ class DBSetting:
 
 
 DB_SETTING = DBSetting
+
+
+API_PREFIX = "/api"
+VERSION = "0.1.0"

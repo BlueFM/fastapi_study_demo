@@ -7,7 +7,7 @@ class CatInfoDataInput(BaseModel):
     name: str = 'nico'
     breed: str = 'unknown'
     skin_color: str = 'unknown'
-    age: Optional[int,None] = None
+    age: Optional[int] = None
     owner: str = 'itself'
 
 
