@@ -28,7 +28,11 @@ async def pinefamilyinfo(data_input: PineFamilyDataInput):
                         hobby=data_input.hobby,
                         motto=data_input.motto)
     # 插入之前先校验数据库中是否已经存在该成员
-
+    sql = select(PineFamily.name).where(PineFamily.name == member.name)
+    exist = await db_client.select(sql)
+    res = exist.fetchone()
+    if res:
+        return {"code": 404, "data": {"error": "have same information !"}}
     await db_client.insert(member)
     sql = select(PineFamily.name, PineFamily.sex, PineFamily.age, PineFamily.profession, PineFamily.hobby,
                  PineFamily.motto).where(PineFamily.name == data_input.name)
