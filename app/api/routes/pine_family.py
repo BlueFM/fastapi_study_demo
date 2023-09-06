@@ -1,5 +1,5 @@
 from sqlalchemy import select
-from fastapi import APIRouter
+from fastapi import APIRouter, Response, status
 from app.db.models.pine_family import PineFamily
 from app.schema.pine_family import PineFamilyResponse, PineFamilyDataInput
 from app import db_client
@@ -23,7 +23,7 @@ async def ret(sql):
 
 
 @router.post("/pinefamilyinfo", response_model=PineFamilyResponse, name="pine_family:pinefamilyinfo")
-async def pinefamilyinfo(data_input: PineFamilyDataInput):
+async def pinefamilyinfo(data_input: PineFamilyDataInput, response: Response):
     member = PineFamily(name=data_input.name, age=data_input.age, sex=data_input.sex, profession=data_input.profession,
                         hobby=data_input.hobby,
                         motto=data_input.motto)
@@ -32,7 +32,8 @@ async def pinefamilyinfo(data_input: PineFamilyDataInput):
     exist = await db_client.select(sql)
     res = exist.fetchone()
     if res:
-        return {"code": 404, "data": {"error": "have same information !"}}
+        response.status_code = status.HTTP_400_BAD_REQUEST
+        return {"code": 400, "data": {"error": "have same information !"}}
     await db_client.insert(member)
     sql = select(PineFamily.name, PineFamily.sex, PineFamily.age, PineFamily.profession, PineFamily.hobby,
                  PineFamily.motto).where(PineFamily.name == data_input.name)
