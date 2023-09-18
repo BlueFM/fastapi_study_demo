@@ -1,5 +1,5 @@
 from demo_1.core.config import DB_CONFIG
-from demo_1.db.db_client import DBClient
+from demo_1.db.database import DBClient
 
 db_client = DBClient(DB_CONFIG)
 
